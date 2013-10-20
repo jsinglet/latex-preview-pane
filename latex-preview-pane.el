@@ -31,6 +31,7 @@
 ;; System specific configuration. 
 ;;
 
+;;;###autoload
 (if (eq window-system 'w32)
     (progn
       (setq pdf-latex-command "pdflatex")
@@ -39,6 +40,7 @@
     )
 )
 
+;;;###autoload
 (if (eq system-type 'darwin)
     (progn
       (setq pdf-latex-command "pdflatex")
@@ -46,6 +48,7 @@
     )
 )
 
+;;;###autoload
 (if (eq system-type 'gnu/linux)
     (progn
       (setq pdf-latex-command "pdflatex")
@@ -53,6 +56,7 @@
     )
 )
 
+;;;###autoload
 (if (eq system-type 'gnu/kfreebsd)
     (progn
       (setq pdf-latex-command "pdflatex")
@@ -66,6 +70,7 @@
 ;;
 ;; Updates an external preview program of the current latex file
 ;;
+;;;###autoload
 (defun latex-preview-update () 
 (interactive)
 (if (eq (call-process pdf-latex-command nil "*pdflatex-buffer*" nil buffer-file-name) 1)
@@ -81,6 +86,7 @@
 ;;
 ;; If a preview pane is open, updates the preview pane on save.
 ;;
+;;;###autoload
 (defun latex-preview-pane-update ()
   (interactive)
   (when (eq major-mode 'latex-mode)
@@ -90,6 +96,7 @@
     (latex-preview-pane-update-p))))
 
 
+;;;###autoload
 (defun latex-preview-pane-update-p () 
 (if (eq (call-process pdf-latex-command nil "*pdflatex-buffer*" nil buffer-file-name) 1)
     (if (y-or-n-p "PDF Generation Failed. View Errors?") (switch-to-buffer "*pdflatex-buffer*"))
@@ -106,15 +113,18 @@
     ))))
 
 
+;;;###autoload
 (add-hook 'after-save-hook 'latex-preview-pane-update)
 
-
+;;;###autoload
 (eval-after-load 'latex-mode
                      '(define-key LaTeX-mode-map (kbd "s-p") 'latex-preview-update))
 
+;;;###autoload
 (eval-after-load 'latex-mode
                      '(define-key LaTeX-mode-map (kbd "M-p") 'latex-preview-update))
 
+;;;###autoload
 (eval-after-load 'latex-mode
                      '(define-key LaTeX-mode-map (kbd "<f15>") 'latex-preview-update))
 
