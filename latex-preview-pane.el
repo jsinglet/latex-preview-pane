@@ -119,3 +119,9 @@
                      '(define-key LaTeX-mode-map (kbd "<f15>") 'latex-preview-update))
 
 
+
+
+(provide 'latex-preview-pane)
+
+
+;;; latex-preview-pane.el ends here
