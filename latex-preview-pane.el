@@ -1,4 +1,4 @@
-;;; latex-preview-pane.el --- Makes LaTeX editing less painfull by providing a updatable preview pane
+;;; latex-preview-pane.el --- Makes LaTeX editing less painful by providing a updatable preview pane
 
 ;; Copyright (C) 2013 John L. Singleton <jsinglet@gmail.com>
 
