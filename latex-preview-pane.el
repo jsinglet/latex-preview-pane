@@ -301,9 +301,10 @@
 	  ))
 
 ;; set some messages for later
-(setq message-latex-preview-pane-welcome (get-message "message-latex-preview-pane-welcome.txt"))
+(setq message-latex-preview-pane-welcome (get-message "~/.emacs.d/elpa/latex-preview-pane-20140125/message-latex-preview-pane-welcome.txt"))
 
-(setq message-no-preview-yet (get-message "message-no-preview-yet.txt"))
+;; a little hacky...
+(setq message-no-preview-yet (get-message "~/.emacs.d/elpa/latex-preview-pane-20140125/message-no-preview-yet.txt"))
 
 
 (defgroup latex-preview-pane nil
