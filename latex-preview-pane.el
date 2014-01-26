@@ -293,10 +293,10 @@
 
 (easy-menu-define words-menu latex-preview-pane-mode-map
        "Menu for working with Latex Preview Pane"
-       '("Latex Preview Pane"
+       '("LaTeX Preview Pane"
           ["Refresh Preview" latex-preview-pane-update]
-	  ["Disable Latex Preview Pane in this Buffer" (latex-preview-pane-mode 'toggle)]
-	  ["Customize Latex Preview Pane" (customize-group 'latex-preview-pane)]
+	  ["Disable LaTeX Preview Pane in this Buffer" (latex-preview-pane-mode 'toggle)]
+	  ["Customize LaTeX Preview Pane" (customize-group 'latex-preview-pane)]
 
 	  ))
 
