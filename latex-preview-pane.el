@@ -4,7 +4,7 @@
 
 ;; Author: John L. Singleton <jsinglet@gmail.com>
 ;; Keywords: latex, preview
-;; Version: 20131020
+;; Version: 20140127
 
 ;; This file is *NOT* part of GNU Emacs.
 ;;
@@ -141,14 +141,16 @@
 ;;;###autoload
 (defun latex-preview-update () 
 (interactive)
-(if (eq (call-process pdf-latex-command nil "*pdflatex-buffer*" nil buffer-file-name) 1)
-    (if (y-or-n-p "PDF Generation Failed. View Errors?") (switch-to-buffer "*pdflatex-buffer*"))
-  (start-process "Preview"
-		     (get-buffer-create "*pdflatex-buffer*")
-		     view-buffer-command
-		     (replace-regexp-in-string ".tex" ".pdf" buffer-file-name)
-		     ))
-)
+(let ( (pdf-file (replace-regexp-in-string ".tex" ".pdf" buffer-file-name)))
+(if (not (file-exists-p pdf-file))
+    (message (concat "File " pdf-file " does not exist. Save your current buffer to generate it."))
+  (if (eq window-system 'w32)
+      (w32-shell-execute "open" pdf-file nil nil)
+    (start-process "Preview"
+		   (get-buffer-create "*pdflatex-buffer*")
+		   view-buffer-command
+		   (replace-regexp-in-string ".tex" ".pdf" buffer-file-name)
+		   )))))
 
 
 ;;
@@ -262,6 +264,22 @@
 ;; Mode definition
 ;;
 
+
+(easy-menu-define words-menu latex-preview-pane-mode-map
+       "Menu for working with Latex Preview Pane"
+       '("LaTeX Preview Pane"
+          ["Refresh Preview" latex-preview-pane-update]
+	  ["Open Preview in External Viewer" latex-preview-update]
+	  ["Disable LaTeX Preview Pane in this Buffer" (latex-preview-pane-mode 'toggle)]
+	  ["Customize LaTeX Preview Pane" (customize-group 'latex-preview-pane)]
+	  
+	  ))
+
+(define-key latex-preview-pane-mode-map (kbd "M-p") 'latex-preview-pane-update)
+(define-key latex-preview-pane-mode-map (kbd "s-p") 'latex-preview-pane-update)
+(define-key latex-preview-pane-mode-map (kbd "M-P") 'latex-preview-update)
+(define-key latex-preview-pane-mode-map (kbd "s-P") 'latex-preview-update)
+
 ;;;###autoload
 (define-minor-mode latex-preview-pane-mode
        "Toggle Latex Preview Pane Mode.
@@ -277,12 +295,7 @@
        ;; The indicator for the mode line.
        :lighter " Latex Preview Pane"
        ;; The minor mode bindings.
-       :keymap
-       '(([s-p] . latex-preview-pane-update)
-	 ([M-p] . latex-preview-pane-update)
-	 ([s-P] . latex-preview-update)
-	 ([M-P] . latex-preview-update)
-	 )
+       :keymap latex-preview-pane-mode-map
        :group 'latex-preview-pane
        ;; if we are turning on the mode, init the view
        (if (and (boundp 'latex-preview-pane-mode) latex-preview-pane-mode)
@@ -291,14 +304,6 @@
 	 (delete-window (window-containing-preview))
 	 ))
 
-(easy-menu-define words-menu latex-preview-pane-mode-map
-       "Menu for working with Latex Preview Pane"
-       '("LaTeX Preview Pane"
-          ["Refresh Preview" latex-preview-pane-update]
-	  ["Disable LaTeX Preview Pane in this Buffer" (latex-preview-pane-mode 'toggle)]
-	  ["Customize LaTeX Preview Pane" (customize-group 'latex-preview-pane)]
-
-	  ))
 
 ;; set some messages for later
 (setq message-latex-preview-pane-welcome (get-message "~/.emacs.d/elpa/latex-preview-pane-20140125/message-latex-preview-pane-welcome.txt"))
