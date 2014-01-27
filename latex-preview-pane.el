@@ -264,6 +264,7 @@
 ;; Mode definition
 ;;
 
+(defvar latex-preview-pane-mode-map (make-keymap) "Latex preview pane keymap")
 
 (easy-menu-define words-menu latex-preview-pane-mode-map
        "Menu for working with Latex Preview Pane"
@@ -306,10 +307,10 @@
 
 
 ;; set some messages for later
-(setq message-latex-preview-pane-welcome (get-message "~/.emacs.d/elpa/latex-preview-pane-20140125/message-latex-preview-pane-welcome.txt"))
+(setq message-latex-preview-pane-welcome (get-message "~/.emacs.d/elpa/latex-preview-pane-20140127/message-latex-preview-pane-welcome.txt"))
 
 ;; a little hacky...
-(setq message-no-preview-yet (get-message "~/.emacs.d/elpa/latex-preview-pane-20140125/message-no-preview-yet.txt"))
+(setq message-no-preview-yet (get-message "~/.emacs.d/elpa/latex-preview-pane-20140127/message-no-preview-yet.txt"))
 
 
 (defgroup latex-preview-pane nil
