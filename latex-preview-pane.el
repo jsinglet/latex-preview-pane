@@ -306,11 +306,13 @@
 	 ))
 
 
-;; set some messages for later
-(setq message-latex-preview-pane-welcome (get-message "~/.emacs.d/elpa/latex-preview-pane-20140127/message-latex-preview-pane-welcome.txt"))
+(defun get-install-dir () 
+  (concat (package--dir "latex-preview-pane" "20140127") "/" ))
 
-;; a little hacky...
-(setq message-no-preview-yet (get-message "~/.emacs.d/elpa/latex-preview-pane-20140127/message-no-preview-yet.txt"))
+;; set some messages for later
+(setq message-latex-preview-pane-welcome (get-message (concat (get-install-dir) "message-latex-preview-pane-welcome.txt")))
+
+(setq message-no-preview-yet (get-message (concat (get-install-dir) "message-no-preview-yet.txt")))
 
 
 (defgroup latex-preview-pane nil
