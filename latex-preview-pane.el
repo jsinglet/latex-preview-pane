@@ -23,8 +23,19 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; The latest version of cygwin-mount.el can always be found at
+
+;;; Commentary:
+;;
+;; latex-preview-pane is a minor mode for Emacs that enables you to preview your LaTeX files directly in Emacs. 
+;; It supports PDF previews, your choice of pdflatex or xelatex, and it highlights errors in your LaTeX buffer.
+;; 
+;; The latest version of latex-preview-pane can always be found at
 ;; https://github.com/jsinglet/latex-preview-pane
+;;
+;; You can find the documentation for latex-preview-pane either on GitHub (above) or on EmacsWiki at: 
+;;
+;;; Code:
+
 
 ;;
 ;; Mode definition
