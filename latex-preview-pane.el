@@ -4,7 +4,8 @@
 
 ;; Author: John L. Singleton <jsinglet@gmail.com>
 ;; Keywords: latex, preview
-;; Version: 20140127
+;; Version: 20140204
+;; URL: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 
 ;; This file is *NOT* part of GNU Emacs.
 ;;
@@ -32,7 +33,7 @@
 ;; The latest version of latex-preview-pane can always be found at
 ;; https://github.com/jsinglet/latex-preview-pane
 ;;
-;; You can find the documentation for latex-preview-pane either on GitHub (above) or on EmacsWiki at: 
+;; You can find the documentation for latex-preview-pane either on GitHub (above) or on EmacsWiki at: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 ;;
 ;;; Code:
 
@@ -318,7 +319,7 @@
 
 
 (defun get-install-dir () 
-  (concat (package--dir "latex-preview-pane" "20140127") "/" ))
+  (concat (package--dir "latex-preview-pane" "20140204") "/" ))
 
 ;; set some messages for later
 (setq message-latex-preview-pane-welcome (get-message (concat (get-install-dir) "message-latex-preview-pane-welcome.txt")))
