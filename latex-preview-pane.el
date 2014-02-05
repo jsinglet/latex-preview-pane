@@ -123,7 +123,7 @@
 ;;
 
 ;;;###autoload
-(if (eq window-system 'w32)
+(if (eq system-type 'windows-nt)
     (progn
       ;(setq pdf-latex-command "pdflatex")
       (setq view-buffer-command "start")
@@ -167,7 +167,7 @@
 (let ( (pdf-file (replace-regexp-in-string ".tex" ".pdf" buffer-file-name)))
 (if (not (file-exists-p pdf-file))
     (message (concat "File " pdf-file " does not exist. Save your current buffer to generate it."))
-  (if (eq window-system 'w32)
+  (if (eq system-type 'windows-nt)
       (w32-shell-execute "open" pdf-file nil nil)
     (start-process "Preview"
 		   (get-buffer-create "*pdflatex-buffer*")
