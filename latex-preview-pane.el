@@ -35,17 +35,17 @@
 ;;
 ;; You can find the documentation for latex-preview-pane either on GitHub (above) or on EmacsWiki at: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 ;;
+;; To enable `latex-preview-pane-mode', use the following code:
+;;
+;;     (add-hook 'latex-mode-hook (lambda () (latex-preview-pane-mode t)))
+
+;;
 ;;; Code:
 
 
 ;;
 ;; Mode definition
 ;;
-
-;;; try to automatically load this when we open a .tex file
-;;;###autoload
-(add-hook 'latex-mode-hook (lambda () (latex-preview-pane-mode t)))
-
 
 
 (defun window-containing-preview () 
