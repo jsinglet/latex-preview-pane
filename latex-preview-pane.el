@@ -4,7 +4,7 @@
 
 ;; Author: John L. Singleton <jsinglet@gmail.com>
 ;; Keywords: latex, preview
-;; Version: 20140204
+;; Version: 20140205
 ;; URL: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 
 ;; This file is *NOT* part of GNU Emacs.
@@ -39,6 +39,7 @@
 
 (require 'doc-view)
 
+(defvar latex-preview-pane-current-version "20140205")
 ;;
 ;; Get rid of free variables warnings
 ;;
@@ -336,6 +337,47 @@
   "The command to produce a PDF file from a latex document."
   :type 'string
   :group 'latex-preview-pane)
+
+;;
+;; Some utility functions
+;;
+
+(defun packing-list ()
+  '("README" 
+    "README.md" 
+    "latex-preview-pane-pkg.el" 
+    "latex-preview-pane.el"
+    "message-latex-preview-pane-welcome.txt"
+    "message-no-preview-yet.txt"
+    "ss-error.PNG"
+    "ss.PNG")
+)
+
+;; for making distributions
+(defun make-dist ()
+  (let ((dist-dir (concat "latex-preview-pane-" latex-preview-pane-current-version)))
+    (let ((dist-file (concat dist-dir ".tar")))
+
+    ;; (call-process "rm" nil "*dist-buffer*" nil ("-fr" dist-dir))
+    (call-process "mkdir" nil "*dist-buffer*" nil dist-dir)
+
+    ;; copy it over
+    (mapc (lambda (f) 
+	    (progn
+	      (message (concat "Copying " f "..."))
+	      (call-process "cp" nil "*dist-buffer*" nil f dist-dir)
+	      ))
+	  (packing-list))
+	  
+
+    (call-process "tar" nil "*dist-buffer*" nil  "-cvf" dist-file (concat dist-dir "/"))
+    (message (concat "Package " dist-file " created."))
+    )
+
+))
+
+;; (make-dist)
+
 
 (provide 'latex-preview-pane)
 
