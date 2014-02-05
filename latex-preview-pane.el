@@ -318,13 +318,10 @@
 	 ))
 
 
-(defun get-install-dir () 
-  (concat (package--dir "latex-preview-pane" "20140204") "/" ))
-
 ;; set some messages for later
-(setq message-latex-preview-pane-welcome (get-message (concat (get-install-dir) "message-latex-preview-pane-welcome.txt")))
-
-(setq message-no-preview-yet (get-message (concat (get-install-dir) "message-no-preview-yet.txt")))
+(let ((installation-dir (file-name-as-directory (file-name-directory load-file-name))))
+  (defvar message-latex-preview-pane-welcome (get-message (expand-file-name "message-latex-preview-pane-welcome.txt" installation-dir)))
+  (defvar message-no-preview-yet (get-message (expand-file-name "message-no-preview-yet.txt" installation-dir))))
 
 
 (defgroup latex-preview-pane nil
