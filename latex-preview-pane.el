@@ -7,38 +7,24 @@
 ;; Version: 20140205
 ;; URL: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 
-;; This file is *NOT* part of GNU Emacs.
-;;
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
-
-
 ;;; Commentary:
-;;
+
 ;; latex-preview-pane is a minor mode for Emacs that enables you to preview your LaTeX files directly in Emacs. 
 ;; It supports PDF previews, your choice of pdflatex or xelatex, and it highlights errors in your LaTeX buffer.
-;; 
+ 
 ;; To enable, place the following in your .emacs file:
-;;
+
 ;; (latex-preview-pane-enable)
-;; 
+
+;; As an alternative, you may enable it on the fly with:
+
+;; M-x latex-preview-pane
+ 
 ;; The latest version of latex-preview-pane can always be found at
 ;; https://github.com/jsinglet/latex-preview-pane
-;;
+
 ;; You can find the documentation for latex-preview-pane either on GitHub (above) or on EmacsWiki at: http://www.emacswiki.org/emacs/LaTeXPreviewPane
-;;
+
 ;;; Code:
 
 (require 'doc-view)
@@ -349,7 +335,7 @@
 ;;
 
 (defun lpp/packing-list ()
-  '("README" 
+  '("README"
     "README.md" 
     "latex-preview-pane-pkg.el" 
     "latex-preview-pane.el"
