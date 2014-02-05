@@ -37,10 +37,14 @@
 ;;
 ;;; Code:
 
+(require 'doc-view)
 
 ;;
-;; Mode definition
+;; Get rid of free variables warnings
 ;;
+
+(defvar message-latex-preview-pane-welcome)
+(defvar message-no-preview-yet)
 
 ;;; try to automatically load this when we open a .tex file
 ;;;###autoload
@@ -201,7 +205,8 @@
 
 (defface bad-face
   '((t (:foreground "White" :background "Red")))
-  "Face for errors")
+  "Face for errors"
+  :group 'latex-preview-pane)
 
 
 (defun chomp (str)
@@ -223,8 +228,7 @@
 (defun line-errors-to-layovers (errors)
   (mapcar (lambda (what) (let ( (line (string-to-number what)))
 			   (let (layoverStart layoverEnd)
-
-			     (goto-line line)
+			     (goto-char (point-min)) (forward-line (1- line))
 			     (setq layoverStart (point))
 			     (setq layoverEnd (+ 1 (line-end-position)))
 			     ;;(message (format "Adding Layover On Line: %d, Start: %d, End: %d" line layoverStart layoverEnd))			     
