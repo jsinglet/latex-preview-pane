@@ -124,40 +124,13 @@
 ;; System specific configuration. 
 ;;
 
-;;;###autoload
-(if (eq system-type 'windows-nt)
-    (progn
-      ;(setq pdf-latex-command "pdflatex")
-      (setq view-buffer-command "start")
-      
-    )
-)
-
-;;;###autoload
-(if (eq system-type 'darwin)
-    (progn
-      ;(setq pdf-latex-command "pdflatex")
-      (setq view-buffer-command "open")
-    )
-)
-
-;;;###autoload
-(if (eq system-type 'gnu/linux)
-    (progn
-      ;(setq pdf-latex-command "pdflatex")
-      (setq view-buffer-command "xdg-open")
-    )
-)
-
-;;;###autoload
-(if (eq system-type 'gnu/kfreebsd)
-    (progn
-      ;(setq pdf-latex-command "pdflatex")
-      (setq view-buffer-command "xdg-open")
-    )
-)
-
-
+(defvar lpp/view-buffer-command
+  (pcase system-type
+    (`windows-nt "start")
+    (`darwin "open")
+    (`gnu/linux "xdg-open")
+    (`gnu/kfreebsd "xdg-open"))
+  "Command used to view a file with the system's native tools.")
 
 
 ;;
@@ -173,7 +146,7 @@
       (w32-shell-execute "open" pdf-file nil nil)
     (start-process "Preview"
 		   (get-buffer-create "*pdflatex-buffer*")
-		   view-buffer-command
+		   lpp/view-buffer-command
 		   (replace-regexp-in-string ".tex" ".pdf" buffer-file-name)
 		   )))))
 
