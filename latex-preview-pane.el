@@ -4,7 +4,7 @@
 
 ;; Author: John L. Singleton <jsinglet@gmail.com>
 ;; Keywords: latex, preview
-;; Version: 20140205
+;; Version: 20140206
 ;; URL: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 
 ;;; Commentary:
@@ -18,7 +18,7 @@
 ;;
 ;; As an alternative, you may enable it on the fly with:
 ;;
-;; M-x latex-preview-pane
+;; M-x latex-preview-pane-mode
 ;; 
 ;; The latest version of latex-preview-pane can always be found at
 ;; https://github.com/jsinglet/latex-preview-pane
@@ -45,7 +45,7 @@
 
 (require 'doc-view)
 
-(defvar latex-preview-pane-current-version "20140205")
+(defvar latex-preview-pane-current-version "20140206")
 ;;
 ;; Get rid of free variables warnings
 ;;
