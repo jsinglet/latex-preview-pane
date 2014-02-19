@@ -139,7 +139,7 @@
 ;;;###autoload
 (defun latex-preview-update () 
 (interactive)
-(let ( (pdf-file (replace-regexp-in-string ".tex" ".pdf" buffer-file-name)))
+(let ( (pdf-file (replace-regexp-in-string "\.tex$" ".pdf" buffer-file-name)))
 (if (not (file-exists-p pdf-file))
     (message (concat "File " pdf-file " does not exist. Save your current buffer to generate it."))
   (if (eq system-type 'windows-nt)
@@ -147,7 +147,7 @@
     (start-process "Preview"
 		   (get-buffer-create "*pdflatex-buffer*")
 		   lpp/view-buffer-command
-		   (replace-regexp-in-string ".tex" ".pdf" buffer-file-name)
+		   (replace-regexp-in-string "\.tex$" ".pdf" buffer-file-name)
 		   )))))
 
 
@@ -241,9 +241,9 @@
       (lpp/line-errors-to-layovers (lpp/line-errors))
       )
   
-  (let ((pdf-filename (replace-regexp-in-string ".tex" ".pdf" buffer-file-name))
+  (let ((pdf-filename (replace-regexp-in-string "\.tex$" ".pdf" buffer-file-name))
 	(tex-buff (current-buffer))
-	(pdf-buff (replace-regexp-in-string ".tex" ".pdf" (buffer-name))))
+	(pdf-buff (replace-regexp-in-string "\.tex$" ".pdf" (buffer-name))))
     (remove-overlays)
     ;; if the file doesn't exist, say that the file isn't available due to error messages
     (if (file-exists-p pdf-filename)
