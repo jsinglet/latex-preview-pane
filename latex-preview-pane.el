@@ -4,7 +4,7 @@
 
 ;; Author: John L. Singleton <jsinglet@gmail.com>
 ;; Keywords: latex, preview
-;; Version: 20140206
+;; Version: 20140219
 ;; URL: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 
 ;;; Commentary:
@@ -45,7 +45,7 @@
 
 (require 'doc-view)
 
-(defvar latex-preview-pane-current-version "20140206")
+(defvar latex-preview-pane-current-version "20140219")
 ;;
 ;; Get rid of free variables warnings
 ;;
