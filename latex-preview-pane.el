@@ -4,7 +4,7 @@
 
 ;; Author: John L. Singleton <jsinglet@gmail.com>
 ;; Keywords: latex, preview
-;; Version: 20140219
+;; Version: 20140403
 ;; URL: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 
 ;;; Commentary:
@@ -45,7 +45,7 @@
 
 (require 'doc-view)
 
-(defvar latex-preview-pane-current-version "20140219")
+(defvar latex-preview-pane-current-version "20140403")
 ;;
 ;; Get rid of free variables warnings
 ;;
@@ -90,7 +90,7 @@
     (set-window-parameter nil 'is-latex-preview-pane nil)
     (if (eq (lpp/window-containing-preview) nil)
     ;; tag the newly created window
-      (set-window-parameter (split-window nil nil 'right) 'is-latex-preview-pane t)
+      (set-window-parameter (split-window nil nil preview-orientation) 'is-latex-preview-pane t)
     )
     (lpp/display-startup (lpp/window-containing-preview))
     ;; add the save hook
@@ -318,6 +318,18 @@
   "The command to produce a PDF file from a latex document."
   :type 'string
   :group 'latex-preview-pane)
+
+
+(defcustom preview-orientation 'right
+  "Which orientation to display the preview pane. Valid values are above, below, left, or right. Defaults to value right."
+  :type '(choice (const :tag "Display preview on right" right)
+                 (const :tag "Display preview on left" left)
+		 (const :tag "Display preview above" above)
+                 (const :tag "Display preview below" below)
+                 )
+  :group 'latex-preview-pane)
+
+
 
 ;;
 ;; Some utility functions
