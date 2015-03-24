@@ -4,7 +4,7 @@
 
 ;; Author: John L. Singleton <jsinglet@gmail.com>
 ;; Keywords: latex, preview
-;; Version: 20140403
+;; Version: 20150321
 ;; URL: http://www.emacswiki.org/emacs/LaTeXPreviewPane
 
 ;;; Commentary:
@@ -45,7 +45,7 @@
 
 (require 'doc-view)
 
-(defvar latex-preview-pane-current-version "20140403")
+(defvar latex-preview-pane-current-version "20150321")
 ;;
 ;; Get rid of free variables warnings
 ;;
@@ -234,7 +234,6 @@
 ;;;###autoload
 (defun latex-preview-pane-update-p () 
 (if (eq (call-process pdf-latex-command nil "*pdflatex-buffer*" nil buffer-file-name) 1)
-    ;; TODO: highlight errors 
     (progn
       (lpp/display-backtrace)
       (remove-overlays)
@@ -243,7 +242,7 @@
   
   (let ((pdf-filename (replace-regexp-in-string "\.tex$" ".pdf" buffer-file-name))
 	(tex-buff (current-buffer))
-	(pdf-buff (replace-regexp-in-string "\.tex$" ".pdf" (buffer-name))))
+	(pdf-buff (replace-regexp-in-string "\.tex" ".pdf" (buffer-name))))
     (remove-overlays)
     ;; if the file doesn't exist, say that the file isn't available due to error messages
     (if (file-exists-p pdf-filename)
