@@ -276,7 +276,10 @@
 
 (defun lpp/invoke-pdf-latex-command ()
   (let ((buff (expand-file-name (lpp/buffer-file-name))) (default-directory (file-name-directory (expand-file-name (lpp/buffer-file-name)))))
-    (call-process pdf-latex-command nil "*pdflatex-buffer*" nil shell-escape-mode buff)
+    (if shell-escape-mode
+	(call-process pdf-latex-command nil "*pdflatex-buffer*" nil shell-escape-mode buff)
+      (call-process pdf-latex-command nil "*pdflatex-buffer*" nil buff)
+      )
     )
   )
 
@@ -387,10 +390,10 @@
   :type 'string
   :group 'latex-preview-pane)
 
-(defcustom shell-escape-mode ""
+(defcustom shell-escape-mode nil
   "Should the pdflatex command use shell escaping?"
   :type '(choice (const :tag "Use shell escaping (-shell-escape)" "-shell-escape")
-                 (const :tag "Do not use shell escaping" "")
+                 (const :tag "Do not use shell escaping" nil)
                  )
   :group 'latex-preview-pane)
 
