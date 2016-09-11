@@ -51,6 +51,7 @@
 ;;
 
 (defvar message-latex-preview-pane-welcome)
+(defvar message-latex-preview-pane-welcome-minimal)
 (defvar message-no-preview-yet)
 (defvar message-no-preview-yet-minimal)
 
@@ -116,7 +117,9 @@
   (set-window-buffer where (get-buffer-create "*Latex Preview Pane Welcome*"))
   (set-buffer (get-buffer "*Latex Preview Pane Welcome*"))
   (erase-buffer)
-  (insert  message-latex-preview-pane-welcome)
+  (if (eq use-minimal-welcome-page 'on)
+      (insert message-latex-preview-pane-welcome-minimal)
+    (insert message-latex-preview-pane-welcome))
   (set-buffer old-buff)
   )))
 
@@ -381,6 +384,7 @@
 ;; set some messages for later
 (let ((installation-dir (if load-file-name (file-name-as-directory (file-name-directory load-file-name)) nil)))
   (defvar message-latex-preview-pane-welcome (lpp/get-message (expand-file-name "message-latex-preview-pane-welcome.txt" installation-dir)))
+  (defvar message-latex-preview-pane-welcome-minimal (lpp/get-message (expand-file-name "message-latex-preview-pane-welcome-minimal.txt" installation-dir)))
   (defvar message-no-preview-yet (lpp/get-message (expand-file-name "message-no-preview-yet.txt" installation-dir)))
   (defvar message-no-preview-yet-minimal (lpp/get-message (expand-file-name "message-no-preview-yet-minimal.txt" installation-dir))))
 
@@ -429,6 +433,14 @@
   :group 'latex-preview-pane)
 
 
+(defcustom use-minimal-welcome-page 'off
+  "Use the normal or a less intrusive welcome page. Normal will show the classical one, while Minimal will use a smaller one."
+  :type '(choice (const :tag "Normal" off)
+                 (const :tag "Minimal" on)
+                 )
+  :group 'latex-preview-pane)
+
+
 ;;
 ;; Some utility functions
 ;;
@@ -439,6 +451,7 @@
     "latex-preview-pane-pkg.el" 
     "latex-preview-pane.el"
     "message-latex-preview-pane-welcome.txt"
+    "message-latex-preview-pane-welcome-minimal.txt"
     "message-no-preview-yet.txt"
     "message-no-preview-yet-minimal.txt"
     "ss-error.PNG"
