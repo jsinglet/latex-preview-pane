@@ -1,0 +1,7 @@
+                  Latex Preview Pane
+
+Error generating your PDF document. Please see the output below for
+more information.
+
+Most Recent Backtrace:
+========================================================

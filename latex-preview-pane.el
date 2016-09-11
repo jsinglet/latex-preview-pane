@@ -45,13 +45,14 @@
 
 (require 'doc-view)
 
-(defvar latex-preview-pane-current-version "20151021")
+(defvar latex-preview-pane-current-version "20160912")
 ;;
 ;; Get rid of free variables warnings
 ;;
 
 (defvar message-latex-preview-pane-welcome)
 (defvar message-no-preview-yet)
+(defvar message-no-preview-yet-minimal)
 
 
 ;;;###autoload
@@ -223,7 +224,9 @@
   (set-window-buffer (lpp/window-containing-preview) (get-buffer-create "*Latex Preview Pane Errors*"))
   (set-buffer (get-buffer "*Latex Preview Pane Errors*"))
   (erase-buffer)
-  (insert  message-no-preview-yet)
+  (if (eq use-minimal-error-page 'on) 
+      (insert message-no-preview-yet-minimal)
+    (insert message-no-preview-yet))
   (set-buffer (get-buffer "*Latex Preview Pane Errors*"))
   (insert  (lpp/last-backtrace))  
   (set-buffer old-buff)
@@ -378,7 +381,8 @@
 ;; set some messages for later
 (let ((installation-dir (if load-file-name (file-name-as-directory (file-name-directory load-file-name)) nil)))
   (defvar message-latex-preview-pane-welcome (lpp/get-message (expand-file-name "message-latex-preview-pane-welcome.txt" installation-dir)))
-  (defvar message-no-preview-yet (lpp/get-message (expand-file-name "message-no-preview-yet.txt" installation-dir))))
+  (defvar message-no-preview-yet (lpp/get-message (expand-file-name "message-no-preview-yet.txt" installation-dir)))
+  (defvar message-no-preview-yet-minimal (lpp/get-message (expand-file-name "message-no-preview-yet-minimal.txt" installation-dir))))
 
 
 (defgroup latex-preview-pane nil
@@ -417,6 +421,13 @@
   :group 'latex-preview-pane)
 
 
+(defcustom use-minimal-error-page 'off
+  "Use the normal or a less intrusive error page. Normal will show the classical one, while Minimal will use a smaller one."
+  :type '(choice (const :tag "Normal" off)
+                 (const :tag "Minimal" on)
+                 )
+  :group 'latex-preview-pane)
+
 
 ;;
 ;; Some utility functions
@@ -429,6 +440,7 @@
     "latex-preview-pane.el"
     "message-latex-preview-pane-welcome.txt"
     "message-no-preview-yet.txt"
+    "message-no-preview-yet-minimal.txt"
     "ss-error.PNG"
     "ss.PNG")
 )
