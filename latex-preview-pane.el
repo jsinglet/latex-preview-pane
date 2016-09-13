@@ -88,6 +88,7 @@
 ;;;###autoload
 (defun init-latex-preview-pane ()
   (progn
+    (make-local-variable 'auto-update-latex-preview-pane)
     ;; make sure the current window isn't the preview pane
     (set-window-parameter nil 'is-latex-preview-pane nil)
     (if (eq (lpp/window-containing-preview) nil)
@@ -294,6 +295,13 @@
     )
   )
 
+(defun latex-preview-pane-toggle-auto-update ()
+  (interactive)
+  (if (eq auto-update-latex-preview-pane 'on) 
+      (setq auto-update-latex-preview-pane 'off)
+    (setq auto-update-latex-preview-pane 'on)
+    )
+  )
 
 ;;;###autoload
 (defun latex-preview-pane-update-p () 
