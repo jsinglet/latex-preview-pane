@@ -45,13 +45,15 @@
 
 (require 'doc-view)
 
-(defvar latex-preview-pane-current-version "20151021")
+(defvar latex-preview-pane-current-version "20160912")
 ;;
 ;; Get rid of free variables warnings
 ;;
 
 (defvar message-latex-preview-pane-welcome)
+(defvar message-latex-preview-pane-welcome-minimal)
 (defvar message-no-preview-yet)
+(defvar message-no-preview-yet-minimal)
 
 
 ;;;###autoload
@@ -86,6 +88,7 @@
 ;;;###autoload
 (defun init-latex-preview-pane ()
   (progn
+    (make-local-variable 'auto-update-latex-preview-pane)
     ;; make sure the current window isn't the preview pane
     (set-window-parameter nil 'is-latex-preview-pane nil)
     (if (eq (lpp/window-containing-preview) nil)
@@ -94,7 +97,7 @@
     )
     (lpp/display-startup (lpp/window-containing-preview))
     ;; add the save hook
-    (add-hook 'after-save-hook 'latex-preview-pane-update nil 'make-it-local)
+    (add-hook 'after-save-hook 'latex-preview-pane-update-on-save nil 'make-it-local)
     ;; refresh that pane
     
     (run-at-time "0 min 3 sec" nil 'latex-preview-pane-update)
@@ -115,7 +118,9 @@
   (set-window-buffer where (get-buffer-create "*Latex Preview Pane Welcome*"))
   (set-buffer (get-buffer "*Latex Preview Pane Welcome*"))
   (erase-buffer)
-  (insert  message-latex-preview-pane-welcome)
+  (if (eq use-minimal-welcome-page 'on)
+      (insert message-latex-preview-pane-welcome-minimal)
+    (insert message-latex-preview-pane-welcome))
   (set-buffer old-buff)
   )))
 
@@ -171,6 +176,11 @@
 	(message "Updating LaTeX Preview Pane")
 	(latex-preview-pane-update-p)))))
 
+(defun latex-preview-pane-update-on-save ()
+  (if (eq auto-update-latex-preview-pane 'on)
+      (latex-preview-pane-update)
+    )
+  )
 
 
 (defun lpp/last-backtrace ()
@@ -223,7 +233,9 @@
   (set-window-buffer (lpp/window-containing-preview) (get-buffer-create "*Latex Preview Pane Errors*"))
   (set-buffer (get-buffer "*Latex Preview Pane Errors*"))
   (erase-buffer)
-  (insert  message-no-preview-yet)
+  (if (eq use-minimal-error-page 'on) 
+      (insert message-no-preview-yet-minimal)
+    (insert message-no-preview-yet))
   (set-buffer (get-buffer "*Latex Preview Pane Errors*"))
   (insert  (lpp/last-backtrace))  
   (set-buffer old-buff)
@@ -283,6 +295,13 @@
     )
   )
 
+(defun latex-preview-pane-toggle-auto-update ()
+  (interactive)
+  (if (eq auto-update-latex-preview-pane 'on) 
+      (setq auto-update-latex-preview-pane 'off)
+    (setq auto-update-latex-preview-pane 'on)
+    )
+  )
 
 ;;;###autoload
 (defun latex-preview-pane-update-p () 
@@ -378,7 +397,9 @@
 ;; set some messages for later
 (let ((installation-dir (if load-file-name (file-name-as-directory (file-name-directory load-file-name)) nil)))
   (defvar message-latex-preview-pane-welcome (lpp/get-message (expand-file-name "message-latex-preview-pane-welcome.txt" installation-dir)))
-  (defvar message-no-preview-yet (lpp/get-message (expand-file-name "message-no-preview-yet.txt" installation-dir))))
+  (defvar message-latex-preview-pane-welcome-minimal (lpp/get-message (expand-file-name "message-latex-preview-pane-welcome-minimal.txt" installation-dir)))
+  (defvar message-no-preview-yet (lpp/get-message (expand-file-name "message-no-preview-yet.txt" installation-dir)))
+  (defvar message-no-preview-yet-minimal (lpp/get-message (expand-file-name "message-no-preview-yet-minimal.txt" installation-dir))))
 
 
 (defgroup latex-preview-pane nil
@@ -417,6 +438,29 @@
   :group 'latex-preview-pane)
 
 
+(defcustom use-minimal-error-page 'off
+  "Use the normal or a less intrusive error page. Normal will show the classical one, while Minimal will use a smaller one."
+  :type '(choice (const :tag "Normal" off)
+                 (const :tag "Minimal" on)
+                 )
+  :group 'latex-preview-pane)
+
+
+(defcustom use-minimal-welcome-page 'off
+  "Use the normal or a less intrusive welcome page. Normal will show the classical one, while Minimal will use a smaller one."
+  :type '(choice (const :tag "Normal" off)
+                 (const :tag "Minimal" on)
+                 )
+  :group 'latex-preview-pane)
+
+
+(defcustom auto-update-latex-preview-pane 'on
+  "Auto update the preview panel on save."
+  :type '(choice (const :tag "On" on)
+                 (const :tag "Off" off)
+                 )
+  :group 'latex-preview-pane)
+
 
 ;;
 ;; Some utility functions
@@ -428,7 +472,9 @@
     "latex-preview-pane-pkg.el" 
     "latex-preview-pane.el"
     "message-latex-preview-pane-welcome.txt"
+    "message-latex-preview-pane-welcome-minimal.txt"
     "message-no-preview-yet.txt"
+    "message-no-preview-yet-minimal.txt"
     "ss-error.PNG"
     "ss.PNG")
 )
