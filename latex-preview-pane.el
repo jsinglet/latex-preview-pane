@@ -44,6 +44,7 @@
 ;;; Code:
 
 (require 'doc-view)
+(require 'cl-lib)
 
 (defvar latex-preview-pane-current-version "20151021")
 ;;
@@ -58,14 +59,9 @@
    "Enable `latex-preview-pane-mode' in `latex-mode'."
    (add-hook 'latex-mode-hook (lambda () (latex-preview-pane-mode 1))))
 
-(defun lpp/flatten(x)
-  (cond ((null x) nil)
-        ((listp x) (append (lpp/flatten (car x)) (lpp/flatten (cdr x))))
-        (t (list x))))
-
 (defun lpp/window-containing-preview ()
   (let (windows i docViewWindow)
-    (setq windows (lpp/flatten (mapcar `window-list (frame-list))))
+    (setq windows (cl-reduce #'append (mapcar `window-list (frame-list))))
     (setq i 0)
     (progn
     (while (and (not docViewWindow) (<= i (length windows)))
