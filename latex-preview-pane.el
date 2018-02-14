@@ -421,7 +421,7 @@
   :group 'latex-preview-pane)
 
 (defcustom latex-preview-pane-use-frame nil
-  "LaTeX Preview Pane can show preview in a new frame"
+  "If set, LaTeX Preview Pane will show preview in a new frame"
   :type 'boolean
   :group 'latex-preview-pane)
 
