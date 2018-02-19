@@ -44,6 +44,7 @@
 ;;; Code:
 
 (require 'doc-view)
+(require 'cl-lib)
 
 (defvar latex-preview-pane-current-version "20151021")
 ;;
@@ -53,17 +54,14 @@
 (defvar message-latex-preview-pane-welcome)
 (defvar message-no-preview-yet)
 
-
 ;;;###autoload
 (defun latex-preview-pane-enable ()
    "Enable `latex-preview-pane-mode' in `latex-mode'."
    (add-hook 'latex-mode-hook (lambda () (latex-preview-pane-mode 1))))
 
-
-
-(defun lpp/window-containing-preview () 
+(defun lpp/window-containing-preview ()
   (let (windows i docViewWindow)
-    (setq windows (window-list))
+    (setq windows (cl-reduce #'append (mapcar `window-list (frame-list))))
     (setq i 0)
     (progn
     (while (and (not docViewWindow) (<= i (length windows)))
@@ -89,9 +87,12 @@
     ;; make sure the current window isn't the preview pane
     (set-window-parameter nil 'is-latex-preview-pane nil)
     (if (eq (lpp/window-containing-preview) nil)
-    ;; tag the newly created window
-      (set-window-parameter (split-window nil nil preview-orientation) 'is-latex-preview-pane t)
-    )
+        ;; tag the newly created window
+        (set-window-parameter
+         (if latex-preview-pane-use-frame
+             (car (window-list (make-frame)))
+           (split-window nil nil preview-orientation))
+         'is-latex-preview-pane t))
     (lpp/display-startup (lpp/window-containing-preview))
     ;; add the save hook
     (add-hook 'after-save-hook 'latex-preview-pane-update nil 'make-it-local)
@@ -299,13 +300,16 @@
     (remove-overlays)
     ;; if the file doesn't exist, say that the file isn't available due to error messages
     (if (file-exists-p pdf-filename)
-	  (if (eq (get-buffer pdf-buff) nil)
-	      (set-window-buffer (lpp/window-containing-preview) (find-file-noselect pdf-filename))
-	    (progn 
+        (if (eq (get-buffer pdf-buff) nil)
+            (progn
+              (message "update-p: no buffer")
+              (set-window-buffer (lpp/window-containing-preview) (find-file-noselect pdf-filename)))
+	    (progn
+          (message "update-p: buffer found")
 	      (set-window-buffer (lpp/window-containing-preview) pdf-buff) 
-	      (switch-to-buffer-other-window pdf-buff)
+	      (switch-to-buffer pdf-buff)
 	      (doc-view-revert-buffer nil t)
-	      (switch-to-buffer-other-window tex-buff) 
+	      (switch-to-buffer tex-buff) 
 	      ))
 	
       ))))
@@ -416,7 +420,10 @@
                  )
   :group 'latex-preview-pane)
 
-
+(defcustom latex-preview-pane-use-frame nil
+  "If set, LaTeX Preview Pane will show preview in a new frame"
+  :type 'boolean
+  :group 'latex-preview-pane)
 
 ;;
 ;; Some utility functions
