@@ -302,10 +302,8 @@
     (if (file-exists-p pdf-filename)
         (if (eq (get-buffer pdf-buff) nil)
             (progn
-              (message "update-p: no buffer")
               (set-window-buffer (lpp/window-containing-preview) (find-file-noselect pdf-filename)))
 	    (progn
-          (message "update-p: buffer found")
 	      (set-window-buffer (lpp/window-containing-preview) pdf-buff) 
 	      (switch-to-buffer pdf-buff)
 	      (doc-view-revert-buffer nil t)
