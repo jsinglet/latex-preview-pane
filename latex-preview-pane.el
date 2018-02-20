@@ -301,8 +301,9 @@
     ;; if the file doesn't exist, say that the file isn't available due to error messages
     (if (file-exists-p pdf-filename)
         (if (eq (get-buffer pdf-buff-name) nil)
-            (progn
-              (set-window-buffer (lpp/window-containing-preview) (find-file-noselect pdf-filename)))
+            (let ((pdf-buff (find-file-noselect pdf-filename)))
+              (buffer-disable-undo pdf-buff)
+              (set-window-buffer (lpp/window-containing-preview) pdf-buff))
           (progn
             (set-window-buffer (lpp/window-containing-preview) pdf-buff-name) 
             (switch-to-buffer pdf-buff-name)
