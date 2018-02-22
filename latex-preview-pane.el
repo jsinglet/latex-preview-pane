@@ -296,22 +296,20 @@
   
   (let ((pdf-filename (replace-regexp-in-string "\.tex$" ".pdf" (lpp/buffer-file-name)))
 	(tex-buff (current-buffer))
-	(pdf-buff (replace-regexp-in-string "\.tex" ".pdf" (buffer-name (get-file-buffer (lpp/buffer-file-name))))))
+	(pdf-buff-name (replace-regexp-in-string "\.tex" ".pdf" (buffer-name (get-file-buffer (lpp/buffer-file-name))))))
     (remove-overlays)
     ;; if the file doesn't exist, say that the file isn't available due to error messages
     (if (file-exists-p pdf-filename)
-        (if (eq (get-buffer pdf-buff) nil)
-            (progn
-              (message "update-p: no buffer")
-              (set-window-buffer (lpp/window-containing-preview) (find-file-noselect pdf-filename)))
-	    (progn
-          (message "update-p: buffer found")
-	      (set-window-buffer (lpp/window-containing-preview) pdf-buff) 
-	      (switch-to-buffer pdf-buff)
-	      (doc-view-revert-buffer nil t)
-	      (switch-to-buffer tex-buff) 
-	      ))
-	
+        (if (eq (get-buffer pdf-buff-name) nil)
+            (let ((pdf-buff (find-file-noselect pdf-filename)))
+              (buffer-disable-undo pdf-buff)
+              (set-window-buffer (lpp/window-containing-preview) pdf-buff))
+          (progn
+            (set-window-buffer (lpp/window-containing-preview) pdf-buff-name) 
+            (switch-to-buffer pdf-buff-name)
+            (doc-view-revert-buffer nil t)
+            (switch-to-buffer tex-buff) 
+            ))
       ))))
 
 ;;
