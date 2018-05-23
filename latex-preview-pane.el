@@ -95,7 +95,11 @@
          'is-latex-preview-pane t))
     (lpp/display-startup (lpp/window-containing-preview))
     ;; add the save hook
-    (add-hook 'after-save-hook 'latex-preview-pane-update nil 'make-it-local)
+
+    (if auto-update-on-save
+         ((add-hook 'after-save-hook 'latex-preview-pane-update nil 'make-it-local))
+       )
+    
     ;; refresh that pane
     
     (run-at-time "0 min 3 sec" nil 'latex-preview-pane-update)
@@ -390,6 +394,12 @@
 (defcustom pdf-latex-command "pdflatex"
   "The command to produce a PDF file from a latex document."
   :type 'string
+  :group 'latex-preview-pane)
+
+
+(defcustom auto-update-on-save nil
+  "If not nil the pane will be updated on each save."
+  :type 'boolean
   :group 'latex-preview-pane)
 
 (defcustom shell-escape-mode nil
