@@ -306,9 +306,7 @@
               (set-window-buffer (lpp/window-containing-preview) pdf-buff))
           (progn
             (set-window-buffer (lpp/window-containing-preview) pdf-buff-name) 
-            (switch-to-buffer pdf-buff-name)
-            (doc-view-revert-buffer nil t)
-            (switch-to-buffer tex-buff) 
+            (with-current-buffer pdf-buff-name (doc-view-revert-buffer nil t))
             ))
       ))))
 
