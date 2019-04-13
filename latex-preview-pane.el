@@ -284,6 +284,11 @@
     )
   )
 
+(defun lpp/doc-view-revert-buffer ()
+  (pcase major-mode
+    ('pdf-view-mode 'pdf-view-revert-buffer)
+    ('doc-view-mode 'doc-view-revert-buffer)
+    (_ (lambda (&rest ignore) (message "cannot refresh preview pane")))))
 
 ;;;###autoload
 (defun latex-preview-pane-update-p () 
@@ -306,7 +311,7 @@
               (set-window-buffer (lpp/window-containing-preview) pdf-buff))
           (progn
             (set-window-buffer (lpp/window-containing-preview) pdf-buff-name) 
-            (with-current-buffer pdf-buff-name (doc-view-revert-buffer nil t))
+            (with-current-buffer pdf-buff-name (funcall (lpp/doc-view-revert-buffer) nil t))
             ))
       ))))
 
