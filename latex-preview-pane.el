@@ -60,16 +60,14 @@
    (add-hook 'latex-mode-hook (lambda () (latex-preview-pane-mode 1))))
 
 (defun lpp/window-containing-preview ()
-  (let (windows i docViewWindow)
+  (let (windows docViewWindow)
     (setq windows (cl-reduce #'append (mapcar `window-list (frame-list))))
-    (setq i 0)
     (progn
-    (while (and (not docViewWindow) (<= i (length windows)))
+    (while (and (not docViewWindow) (< 0 (length windows)))
       (let ((currentWindow (pop windows)))
 	(if (window-parameter currentWindow 'is-latex-preview-pane)
 	    (setq docViewWindow currentWindow)
 	  ))
-      (setq i (1+ i))
       )
     docViewWindow)))
 
