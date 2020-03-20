@@ -207,16 +207,23 @@
     ;; get all the line numbers.
     (mapcar (lambda (what) (lpp/chomp (substring what 2))) (latex-pp-filter (lambda (what) (eq (string-match "l\\.[0-9]*" what) 0))  (split-string error-msg "\n"))))))
 
+(defvar lpp/error-overlays nil
+  "List of error overlays, saved here to be deleted later upon
+recompilation.")
 
 (defun lpp/line-errors-to-layovers (errors)
-  (mapcar (lambda (what) (let ( (line (string-to-number what)))
-			   (let (layoverStart layoverEnd)
-			     (goto-char (point-min)) (forward-line (1- line))
-			     (setq layoverStart (point))
-			     (setq layoverEnd (+ 1 (line-end-position)))
-			     ;;(message (format "Adding Layover On Line: %d, Start: %d, End: %d" line layoverStart layoverEnd))			     
-			     ;; create the layover
-			     (overlay-put (make-overlay layoverStart layoverEnd) 'face 'bad-face)))) errors))
+  (dolist (what errors)
+    ;; go to error
+    (goto-char (point-min))
+    (forward-line (1- (string-to-number what)))
+    ;; create overlay
+    (let ((ov (make-overlay (point) (1+ (line-end-position)))))
+      (overlay-put ov 'face 'bad-face)
+      (push ov lpp/error-overlays))))
+
+(defun lpp/remove-error-overlays ()
+  (mapc #'delete-overlay lpp/error-overlays)
+  (setq lpp/error-overlays nil))
 
 (defun lpp/display-backtrace ()
   (let ((old-buff (current-buffer)))
@@ -290,14 +297,14 @@
 (if (eq (lpp/invoke-pdf-latex-command) 1)
     (progn
       (lpp/display-backtrace)
-      (remove-overlays)
+      (lpp/remove-error-overlays)
       (lpp/line-errors-to-layovers (lpp/line-errors))
       )
   
   (let ((pdf-filename (replace-regexp-in-string "\.tex$" ".pdf" (lpp/buffer-file-name)))
 	(tex-buff (current-buffer))
 	(pdf-buff-name (replace-regexp-in-string "\.tex" ".pdf" (buffer-name (get-file-buffer (lpp/buffer-file-name))))))
-    (remove-overlays)
+    (lpp/remove-error-overlays)
     ;; if the file doesn't exist, say that the file isn't available due to error messages
     (if (file-exists-p pdf-filename)
         (if (eq (get-buffer pdf-buff-name) nil)
