@@ -46,7 +46,7 @@
 (require 'doc-view)
 (require 'cl-lib)
 
-(defvar latex-preview-pane-current-version "20151021")
+(defvar latex-preview-pane-current-version "20210417")
 ;;
 ;; Get rid of free variables warnings
 ;;
@@ -277,11 +277,10 @@
 
 (defun lpp/invoke-pdf-latex-command ()
   (let ((buff (expand-file-name (lpp/buffer-file-name))) (default-directory (file-name-directory (expand-file-name (lpp/buffer-file-name)))))
-    (if shell-escape-mode
-	(call-process pdf-latex-command nil "*pdflatex-buffer*" nil shell-escape-mode buff)
-      (call-process pdf-latex-command nil "*pdflatex-buffer*" nil buff)
-      )
-    )
+    (if (string-match pdf-latex-command "luatex")  ;; long flags in luatex require -- (man luatex)
+        (call-process pdf-latex-command nil "*pdflatex-buffer*" nil (concat "--synctex=" synctex-number " -" shell-escape-mode) buff)
+        (call-process pdf-latex-command nil "*pdflatex-buffer*" nil (concat "-synctex=" synctex-number " " shell-escape-mode) buff)
+      ))
   )
 
 
@@ -390,8 +389,23 @@
   :type 'string
   :group 'latex-preview-pane)
 
+
+(defcustom synctex-number "0"
+  "Should the pdf-latex-command command run with SyncTeX?"
+  :type '(choice (const :tag "Run without SyncTeX" "0")
+                 (const :tag "SyncTeX files are text files" "-1")
+                 (const :tag "SyncTeX files are compressed with gz (Standard)" "1")
+                 (const :tag "No .gz extension is used" "2")
+                 (const :tag "Activate form support, useful for pdftex" "4")
+                 (const :tag "Better file compression" "8")
+                 (const :tag "Everything" "15")
+                 (string :tag "Other values")
+                 )
+  :group 'latex-preview-pane)
+
+
 (defcustom shell-escape-mode nil
-  "Should the pdflatex command use shell escaping?"
+  "Should the pdf-latex-command command use shell escaping?"
   :type '(choice (const :tag "Use shell escaping (-shell-escape)" "-shell-escape")
                  (const :tag "Do not use shell escaping" nil)
                  )
